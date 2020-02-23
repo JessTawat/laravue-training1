@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Post;
+use App\Models\Comment;
 
-class PostController extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,17 +13,16 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        // eloquent to get all posts
-        // $posts = Post::all();
+    {   
+        // Get All Comments
+        // $comments = Comment::all();
 
-        // eloquent to get the post with user using relationship
-        $posts = Post::with('user', 'comments')
-        ->orderBy('created_at', 'desc')
+        $comments = Comment::with('user', 'post')
         ->get();
 
-        return $posts;
+        return $comments;
     }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -32,7 +31,8 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        return Post::create($request->all());
+        return Comment::create($request->all());
+
     }
 
     /**
@@ -41,7 +41,12 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    
+    public function show($id)
+    {
+        $comment = Comment::findOrFail($id);
+
+        return $comment;
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -51,11 +56,10 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $post = Post::findOrFail($id);
+        $comment = Comment::findOrFail($id);
+        $comment->update($request->all());
 
-        $post->update($request->all());
-
-        return $post;
+        return $comment;
     }
 
     /**
@@ -66,9 +70,10 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        $post = Post::findOrFail($id);
-        $post->delete();
+        $comment = Comment::findorFail($id);
+        $comment->delete();
 
-        return Post::all();
+        return $comment;
+
     }
 }

@@ -19,7 +19,5 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 
-// list of Posts
-Route::get('posts', 'PostController@index');
 
 
